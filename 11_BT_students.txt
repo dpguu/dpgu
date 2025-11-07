@@ -1,0 +1,53 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract StudentData {
+    // Structure for storing student info
+    struct Student {
+        uint id;
+        string name;
+        uint age;
+    }
+
+    // Dynamic array to hold all students
+    Student[] public students;
+
+    // ➕ Add new student
+    function addStudent(uint _id, string memory _name, uint _age) public {
+        students.push(Student(_id, _name, _age));
+    }
+
+    // 🔍 Get total number of students
+    function getStudentCount() public view returns (uint) {
+        return students.length;
+    }
+
+    // 🔎 Get student details by ID
+    function getStudentById(uint _id) public view returns (uint, string memory, uint) {
+        for (uint i = 0; i < students.length; i++) {
+            if (students[i].id == _id) {
+                return (students[i].id, students[i].name, students[i].age);
+            }
+        }
+        revert("Student not found");
+    }
+
+    // ❌ Remove student by ID
+    function removeStudent(uint _id) public {
+        for (uint i = 0; i < students.length; i++) {
+            if (students[i].id == _id) {
+                // Replace the found student with the last one
+                students[i] = students[students.length - 1];
+                // Remove the last student
+                students.pop();
+                return;
+            }
+        }
+        revert("Student not found");
+    }
+
+    // 🧾 Fallback function for invalid calls
+    fallback() external {
+        // You can optionally add code to handle unexpected function calls
+    }
+}
